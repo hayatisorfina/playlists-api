@@ -31,4 +31,26 @@ export class PlaylistController {
   remove(@Param('id') id: string) {
     return this.playlistService.remove(+id);
   }
+
+  @Post(':id/media/:mediaId')
+  addMedia(
+    @Param('id') id: string,
+    @Param('mediaId') mediaId: string,
+  ) {
+    return this.playlistService.addMedia(
+      Number(id),
+      Number(mediaId),
+    );
+  }
+
+  @Delete(':id/media/:mediaId')
+  removeMedia(
+    @Param('id') id: string,
+    @Param('mediaId') mediaId: string,
+  ) {
+    return this.playlistService.removeMedia(
+      Number(id),
+      Number(mediaId),
+    );
+  }
 }

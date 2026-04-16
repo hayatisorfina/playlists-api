@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Playlist } from './entities/playlist.entity';
+import { MediaItem } from 'src/media/entities/media.entity';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
 
 @Injectable()
@@ -16,11 +17,15 @@ export class PlaylistService {
   }
 
   findAll() {
-    return this.playlistModel.findAll();
+    return this.playlistModel.findAll({
+      include: [MediaItem],
+    });
   }
 
   async findOne(id: number) {
-    const playlist = await this.playlistModel.findByPk(id);
+    const playlist = await this.playlistModel.findByPk(id, {
+      include: [MediaItem],
+    });
 
     if (!playlist) {
       throw new NotFoundException(
@@ -46,6 +51,28 @@ export class PlaylistService {
     return {
       success: true,
       message: 'Playlist deleted successfully',
+    };
+  }
+
+  async addMedia(playlistId: number, mediaId: number) {
+    const playlist = await this.findOne(playlistId);
+
+    await playlist.$add('mediaItems', mediaId);
+
+    return {
+      success: true,
+      message: 'Media added to playlist',
+    };
+  }
+
+  async removeMedia(playlistId: number, mediaId: number) {
+    const playlist = await this.findOne(playlistId);
+
+    await playlist.$remove('mediaItems', mediaId);
+
+    return {
+      success: true,
+      message: 'Media removed from playlist',
     };
   }
 }
