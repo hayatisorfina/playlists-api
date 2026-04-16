@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { PlaylistModule } from './playlist/playlist.module';
+import { MediaModule } from './media/media.module';
 
 @Module({
   imports: [
@@ -18,6 +19,8 @@ import { PlaylistModule } from './playlist/playlist.module';
 
     // Modules
     PlaylistModule,
+
+    MediaModule,
   ],
 })
 export class AppModule {}
