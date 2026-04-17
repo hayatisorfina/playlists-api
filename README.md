@@ -212,6 +212,20 @@ CREATE DATABASE playlist;
 
 This project reads database and port values from `process.env`.
 
+Start by cloning the example file:
+
+```bash
+cp .env.example .env
+```
+
+If you are using PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Then update `.env` if your local database settings are different.
+
 Current variables used by the app:
 
 - `DB_HOST`
