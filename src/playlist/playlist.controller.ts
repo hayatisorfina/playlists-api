@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PlaylistService } from './playlist.service';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
+import { CreateMediaDto } from 'src/media/dto/create-media.dto';
 
 @Controller('playlist')
 export class PlaylistController {
@@ -32,14 +33,14 @@ export class PlaylistController {
     return this.playlistService.remove(+id);
   }
 
-  @Post(':id/media/:mediaId')
+  @Post(':id/media')
   addMedia(
     @Param('id') id: string,
-    @Param('mediaId') mediaId: string,
+    @Body() createMediaDto: CreateMediaDto,
   ) {
-    return this.playlistService.addMedia(
+    return this.playlistService.createMedia(
       Number(id),
-      Number(mediaId),
+      createMediaDto,
     );
   }
 

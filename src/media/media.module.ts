@@ -8,5 +8,6 @@ import { MediaItem } from './entities/media.entity';
   imports: [SequelizeModule.forFeature([MediaItem])],
   providers: [MediaService],
   controllers: [MediaController],
+  exports: [MediaService],
 })
 export class MediaModule {}

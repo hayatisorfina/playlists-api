@@ -19,8 +19,8 @@ export class MediaService {
     return this.mediaModel.findAll();
   }
 
-  findOne(id: number) {
-    const media = this.mediaModel.findByPk(id);
+  async findOne(id: number) {
+    const media = await this.mediaModel.findByPk(id);
 
     if (!media) {
       throw new NotFoundException(

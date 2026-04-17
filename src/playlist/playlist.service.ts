@@ -4,12 +4,15 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Playlist } from './entities/playlist.entity';
 import { MediaItem } from 'src/media/entities/media.entity';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
+import { MediaService } from 'src/media/media.service';
+import { CreateMediaDto } from 'src/media/dto/create-media.dto';
 
 @Injectable()
 export class PlaylistService {
   constructor(
     @InjectModel(Playlist)
     private playlistModel: typeof Playlist,
+    private readonly mediaService: MediaService,
   ) {}
 
   create(createPlaylistDto: CreatePlaylistDto) {
@@ -65,14 +68,38 @@ export class PlaylistService {
     };
   }
 
+  async createMedia(playlistId: number, createMediaDto: CreateMediaDto) {
+    const media = await this.mediaService.create(createMediaDto);
+
+    try {
+      await this.addMedia(playlistId, media.id);
+    } catch (error) {
+      await media.destroy();
+      throw error;
+    }
+
+    return media;
+  }
+
   async removeMedia(playlistId: number, mediaId: number) {
     const playlist = await this.findOne(playlistId);
+    const media = await this.mediaService.findOne(mediaId);
+    const isAttached = playlist.mediaItems.some(
+      ({ id }) => id === media.id,
+    );
+
+    if (!isAttached) {
+      throw new NotFoundException(
+        `Media with ID ${mediaId} is not attached to playlist ${playlistId}`,
+      );
+    }
 
     await playlist.$remove('mediaItems', mediaId);
+    await this.mediaService.remove(mediaId);
 
     return {
       success: true,
-      message: 'Media removed from playlist',
+      message: 'Media deleted from playlist',
     };
   }
 }
