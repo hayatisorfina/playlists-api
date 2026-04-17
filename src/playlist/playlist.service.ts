@@ -2,10 +2,10 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Playlist } from './entities/playlist.entity';
-import { MediaItem } from 'src/media/entities/media.entity';
+import { MediaItem } from '../media/entities/media.entity';
 import { UpdatePlaylistDto } from './dto/update-playlist.dto';
-import { MediaService } from 'src/media/media.service';
-import { CreateMediaDto } from 'src/media/dto/create-media.dto';
+import { MediaService } from '../media/media.service';
+import { CreateMediaDto } from '../media/dto/create-media.dto';
 
 @Injectable()
 export class PlaylistService {
